@@ -14,5 +14,5 @@ Este servicio consulta la información del clima de una ciudad especifica.
 ### comandos
 `npm install` - instala las dependencias<br/>
 `npm run start` - corre el servicio MCP<br />
-`npm run inspector` - corre el servicio de testing MCP abre una pestaña en el navegador<br />
+`npm run inspector` - corre el servicio de testing MCP abre una pestaña en el navegador. Debes tener correndo el servicio MCP para hacer testing<br />
 
