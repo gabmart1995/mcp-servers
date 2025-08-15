@@ -1,0 +1,19 @@
+{
+  "name": "00-example",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main.js",
+    "inspector": "npx @modelcontextprotocol/inspector node main.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.17.3",
+    "zod": "3.25.76"
+  }
+}
