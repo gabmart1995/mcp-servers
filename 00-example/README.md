@@ -1,4 +1,4 @@
-# MCP Example
+# MCP Weather-Example
 
 Este proyecto es una integración de modelos MCP para inteligencia artificial,
 su objetivo es dar mejorar el modelo. Dando segun la necesidad, acceso al sistema 
