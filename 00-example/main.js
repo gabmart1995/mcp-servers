@@ -26,6 +26,14 @@ async function main() {
         async function({city}) {  // funcion manejadora del servicio
             // solicitamos la informacion a la geolocalizacion
             const response = await fetch(`${GEOCODING_API}search?name=${city}&count=10&language=en&format=json`);
+            if (!response.ok) {
+                return {
+                    content: [
+                        {type: 'text', text: `El servicio de localizacion no se encuentra activo en estos momentos`}
+                    ],
+                }; 
+            }
+            
             const data = await response.json();
 
             // sino llega informacion sobre la ciudad desde el API
@@ -42,6 +50,14 @@ async function main() {
             
             // consulta el api del clima
             const responseWeather = await fetch(`${WEATHER_API}forecast?latitude=${latitude}&longitude=${longitude}&hourly=temperature_2m,precipitation,rain,is_day`)
+            if (!responseWeather.ok) {
+                return {
+                    content: [
+                        {type: 'text', text: `El servicio del clima no se encuentra activo en estos momentos`}
+                    ],
+                }; 
+            }
+            
             const weatherData = await responseWeather.json();
 
             // le retornamos a la IA los datos crudos para que los procese hacia 
