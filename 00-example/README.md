@@ -1,15 +1,13 @@
 # MCP Weather-Example
+Este proyecto es una integración de modelos MCP (Model Context Protocol) para inteligencia artificial
 
-Este proyecto es una integración de modelos MCP para inteligencia artificial,
-su objetivo es dar mejorar el modelo. Dando segun la necesidad, acceso al sistema 
-de archivos, bases de datos o consultas externas a API o servicios 
-para ser consumidos por IA.
+El objetivo es mejorar la interaccion con el usuario con sus clientes MCP. Pueden acceder al sistema de archivos, bases de datos o consultas externas a servicios REST para obtener información y mejorar su resultado.
 
 Este servicio consulta la información del clima de una ciudad especifica. 
 
 ## Requerimientos
 - NodeJS >= v.22.7
-- Windsurf, Cursor o VS code con Copilot
+- Windsurf, Cursor o VS code con Copilot con IA incorporada
 
 ### comandos
 `npm install` - instala las dependencias<br/>
