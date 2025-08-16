@@ -1,5 +1,5 @@
 import {McpServer} from '@modelcontextprotocol/sdk/server/mcp.js';
-import {StdioServerTransport} from "@modelcontextprotocol/sdk/server/stdio.js";
+import {StdioServerTransport} from '@modelcontextprotocol/sdk/server/stdio.js';
 import * as z from 'zod';
 
 const GEOCODING_API = 'https://geocoding-api.open-meteo.com/v1/';
