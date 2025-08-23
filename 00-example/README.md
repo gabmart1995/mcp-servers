@@ -6,7 +6,7 @@ El objetivo es mejorar la interaccion con el usuario con sus clientes MCP. Puede
 Este servicio consulta la información del clima de una ciudad especifica. 
 
 ## Requerimientos
-- NodeJS >= v.22.7
+- NodeJS >= v.18
 - Windsurf, Cursor o VS code con Copilot con IA incorporada
 
 ### comandos
