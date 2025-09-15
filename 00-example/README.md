@@ -5,12 +5,16 @@ El objetivo es mejorar la interaccion con el usuario con sus clientes MCP. Puede
 
 Este servicio consulta la información del clima de una ciudad especifica. 
 
+Se incluye el codigo del cliente para el desarrollo de herramientas del lado del
+frontend con el objetivo de hacer testing, para evitar la necesidad de instalar 
+claude desktop
+
 ## Requerimientos
-- NodeJS >= v.18
+- NodeJS >= V.18
 - Windsurf, Cursor o VS code con Copilot con IA incorporada
 
 ### comandos
 `npm install` - instala las dependencias<br/>
-`npm run start` - corre el servicio MCP<br />
+`npm run server` - corre el servicio MCP<br />
 `npm run inspector` - corre el servicio de testing MCP abre una pestaña en el navegador.<br />
-
+`npm run client` - corre un cliente mcp para usar la conexion sin el inspector.
