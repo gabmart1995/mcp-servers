@@ -11,6 +11,8 @@ claude desktop
 
 Se utiliza la tecnologia de SEA para transformar el codigo en un ejecutable
 
+El uso de NodeJS es temporal hasta que se normalice el desarrollo del paquete mcp de Go que se encuentra en fase Beta.
+
 ## Requerimientos
 - NodeJS >= V.22
 - Windsurf, Cursor o VS code con Copilot con IA incorporada
