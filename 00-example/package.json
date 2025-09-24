@@ -4,8 +4,8 @@
   "scripts": {
     "client": "node client.mjs",
     "server": "node server.mjs",
-    "inspector": "npx @modelcontextprotocol/inspector server-mcp-weather",
-    "build": "esbuild --bundle --platform=node --target=node22 --outfile=bundle.js --format=cjs server.cjs",
+    "inspector": "npx @modelcontextprotocol/inspector ./server-mcp-weather",
+    "build": "esbuild --bundle --platform=node --target=node22 --minify --outfile=bundle.js --format=cjs server.cjs",
     "build-linux": "./make_linux.sh",
     "build-windows": "./make_windows.sh"
   },
