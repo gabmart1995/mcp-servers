@@ -1,2 +1,4 @@
 mcp-resources/node_modules
 mcp-resources/*.blob
+mcp-resources/mcp-resources
+mcp-resources/bundle.js
