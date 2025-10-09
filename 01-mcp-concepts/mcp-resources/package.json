@@ -1,5 +1,5 @@
 {
-  "name": "00-example",
+  "name": "01-mcp-concepts",
   "version": "1.0.0",
   "scripts": {
     "test": "node main_test.js",

@@ -1,3 +1,4 @@
+/** modulo de testing para probar el MCP */
 const test = require('node:test');
 
 const { Client } = require('@modelcontextprotocol/sdk/client/index.js');
@@ -5,8 +6,8 @@ const { StdioClientTransport } = require('@modelcontextprotocol/sdk/client/stdio
 
 // 1.- generamos el protocolo de transporte
 const transport = new StdioClientTransport({
-    command: './mcp-resources', // or node server.mjs | node server.cjs
-    args: []
+    command: 'node', // or node server.mjs | node server.cjs
+    args: ['main.js']
 });
 
 // 2.- generamos el cliente
@@ -20,6 +21,14 @@ test.describe('test mcp calculator', () => {
         await client.connect(transport);
     });
 
+    test.it('list tools', async t => {
+        const {tools} = await client.listTools();
+        t.assert.ok(
+            Array.isArray(tools) && tools.length > 0, 
+            'Tools is empty or not is array'
+        );
+    });
+    
     test.it('add two numbers', async t => {
         const input = {
             a: 25.00,

@@ -1,0 +1,14 @@
+{
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "1.17.3",
+        "zod": "3.25.76"
+    },
+    "scripts": {
+        "test": "node main_test.js",
+        "server": "node main.js",
+        "inspector": "npx @modelcontextprotocol/inspector node main.js",
+        "build": "esbuild --bundle --platform=node --target=node22 --minify --outfile=bundle.js --format=cjs main.js",
+        "build-linux": "./make_linux.sh",
+        "build-windows": "./make_windows.sh"
+    }
+}
