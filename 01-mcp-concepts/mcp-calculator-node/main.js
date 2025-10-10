@@ -1,5 +1,5 @@
-const {McpServer, ResourceTemplate} = require('@modelcontextprotocol/sdk/server/mcp.js');
-const {StdioServerTransport} = require('@modelcontextprotocol/sdk/server/stdio.js');
+const { McpServer, ResourceTemplate } = require('@modelcontextprotocol/sdk/server/mcp.js');
+const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
 const { default: z } = require('zod');
 
 async function main() {
@@ -11,9 +11,9 @@ async function main() {
     server.tool(
         'add',
         { a: z.number(), b: z.number() },
-        async function({a, b}) {
+        async function ({ a, b }) {
             return {
-                content: [{type: 'text', text: String(a + b)}]
+                content: [{ type: 'text', text: String(a + b) }]
             }
         }
     );
@@ -21,9 +21,9 @@ async function main() {
     server.tool(
         'substract',
         { a: z.number(), b: z.number() },
-        async function({a, b}) {
+        async function ({ a, b }) {
             return {
-                content: [{type: 'text', text: String(a - b)}]
+                content: [{ type: 'text', text: String(a - b) }]
             }
         }
     );
@@ -31,9 +31,9 @@ async function main() {
     server.tool(
         'multiply',
         { a: z.number(), b: z.number() },
-        async function({a, b}) {
+        async function ({ a, b }) {
             return {
-                content: [{type: 'text', text: String(a * b)}]
+                content: [{ type: 'text', text: String(a * b) }]
             }
         }
     );
@@ -41,16 +41,16 @@ async function main() {
     server.tool(
         'divide',
         { a: z.number(), b: z.number() },
-        async function({a, b}) {
+        async function ({ a, b }) {
             if (b === 0) {
                 return {
                     isError: true,
-                    content: [{type: 'Text', text: 'Error: dont divide by zero'}]
+                    content: [{ type: 'Text', text: 'Error: dont divide by zero' }]
                 };
             }
-            
+
             return {
-                content: [{type: 'text', text: String(a / b)}]
+                content: [{ type: 'text', text: String(a / b) }]
             }
         }
     );
@@ -61,7 +61,7 @@ async function main() {
             'greeting://{name}',
             { list: undefined } // descartara almacenar el archivo
         ),
-        async function (uri, {name}) {
+        async function (uri, { name }) {
             return {
                 contents: [{
                     uri: uri.href,
@@ -70,7 +70,7 @@ async function main() {
             }
         }
     )
-    
+
     const transport = new StdioServerTransport();
     await server.connect(transport);
 }

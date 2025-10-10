@@ -17,13 +17,13 @@
 const sea = require('node:sea');
 
 if (sea.isSea()) {
-    const {createRequire} = require('node:module');
+    const { createRequire } = require('node:module');
     require = createRequire(__filename);
 }
 
-const {McpServer} = require('@modelcontextprotocol/sdk/server/mcp.js');
-const {StdioServerTransport} = require('@modelcontextprotocol/sdk/server/stdio.js');
-const {default: z} = require('zod');
+const { McpServer } = require('@modelcontextprotocol/sdk/server/mcp.js');
+const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
+const { default: z } = require('zod');
 
 const GEOCODING_API = 'https://geocoding-api.open-meteo.com/v1/';
 const WEATHER_API = 'https://api.open-meteo.com/v1/';
