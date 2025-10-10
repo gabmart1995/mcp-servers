@@ -4,10 +4,10 @@
         "zod": "3.25.76"
     },
     "scripts": {
-        "test": "node main_test.js",
-        "server": "node main.js",
-        "inspector": "npx @modelcontextprotocol/inspector node main.js",
-        "build": "esbuild --bundle --platform=node --target=node22 --minify --outfile=bundle.js --format=cjs main.js",
+        "test": "node main_test.cjs",
+        "server": "node main.cjs",
+        "inspector": "npx @modelcontextprotocol/inspector node main.cjs",
+        "build": "esbuild --bundle --platform=node --target=node22 --minify --outfile=bundle.js --format=cjs main.cjs",
         "build-linux": "./make_linux.sh",
         "build-windows": "./make_windows.sh"
     }

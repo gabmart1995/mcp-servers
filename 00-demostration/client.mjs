@@ -9,8 +9,8 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 async function main() {
     // 1.- generamos el protocolo de transporte
     const transport = new StdioClientTransport({
-        command: '/opt/mcp-servers/server-mcp-weather', // or node server.mjs | node server.cjs
-        args: []
+        command: 'node', // or node server.mjs | node server.cjs
+        args: ['server.mjs']
     });
 
     // 2.- generamos el cliente
@@ -26,7 +26,7 @@ async function main() {
     const result = await client.callTool({
         name: 'fetch-weather',
         arguments: {
-            city: 'Caracas'
+            city: 'Barcelona'
         }
     });
 
