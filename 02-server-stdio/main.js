@@ -1,7 +1,7 @@
-const {Server} = require('@modelcontextprotocol/sdk/server/index.js');
-const {StdioServerTransport} = require('@modelcontextprotocol/sdk/server/stdio.js');
-const {ListToolsRequestSchema, CallToolRequestSchema} = require('@modelcontextprotocol/sdk/types.js');
-const {default: z} = require('zod');
+const { Server } = require('@modelcontextprotocol/sdk/server/index.js');
+const { StdioServerTransport } = require('@modelcontextprotocol/sdk/server/stdio.js');
+const { ListToolsRequestSchema, CallToolRequestSchema } = require('@modelcontextprotocol/sdk/types.js');
+const { default: z } = require('zod');
 
 /**
  * este modulo configura el servidor 
@@ -9,31 +9,31 @@ const {default: z} = require('zod');
  */
 async function main() {
     const server = new Server({
-            name: 'example-server',
-            version: '0.0.1'
-        }, 
+        name: 'example-server',
+        version: '0.0.1'
+    },
         {
             capabilities: {
                 tools: {}
             }
         }
     );
-    
+
     // establemos los esquemas
     const addArgsSchema = z.object({
         a: z.number().describe('First number'),
         b: z.number().describe('Secound number')
     });
-    
+
     const multiplyArgsSchema = z.object({
         a: z.number().describe('First number'),
         b: z.number().describe('Secound number')
     });
-    
+
     const greetingArgsSchema = z.object({
         name: z.string().describe('Name for the person to greet')
     });
-    
+
     // lista los herramientas MCP disponibles
     server.setRequestHandler(ListToolsRequestSchema, async () => {
         return {
@@ -44,8 +44,8 @@ async function main() {
                     inputSchema: {
                         type: 'object',
                         properties: {
-                            a: {type: 'number', description: 'first number'},
-                            b: {type: 'number', description: 'second number'}
+                            a: { type: 'number', description: 'first number' },
+                            b: { type: 'number', description: 'second number' }
                         },
                         required: ['a', 'b']
                     }
@@ -56,8 +56,8 @@ async function main() {
                     inputSchema: {
                         type: 'object',
                         properties: {
-                            a: {type: 'number', description: 'first number'},
-                            b: {type: 'number', description: 'second number'}
+                            a: { type: 'number', description: 'first number' },
+                            b: { type: 'number', description: 'second number' }
                         },
                         required: ['a', 'b']
                     }
@@ -68,7 +68,7 @@ async function main() {
                     inputSchema: {
                         type: 'object',
                         properties: {
-                            name: {type: 'string', description: 'Name for a person to greet'}
+                            name: { type: 'string', description: 'Name for a person to greet' }
                         },
                         required: ['name']
                     }
@@ -84,20 +84,20 @@ async function main() {
             ],
         }
     });
-    
+
     // manejador de recursos MCP
     server.setRequestHandler(CallToolRequestSchema, async request => {
-        const {name, arguments: args} = request.params;
-    
+        const { name, arguments: args } = request.params;
+
         // utilizamos un switch para determinar las acciones del LLM
         switch (name) {
             case 'add': {
                 // validamos los datos
-                const {a, b} = addArgsSchema.parse(args);
+                const { a, b } = addArgsSchema.parse(args);
                 const result = a + b;
-    
+
                 console.error(`Adding: ${a} + ${b} = ${result}`);
-    
+
                 return {
                     content: [
                         {
@@ -107,14 +107,14 @@ async function main() {
                     ]
                 }
             }
-    
+
             case 'multiply': {
                 // validamos los datos
-                const {a, b} = multiplyArgsSchema.parse(args);
+                const { a, b } = multiplyArgsSchema.parse(args);
                 const result = a * b;
-    
+
                 console.error(`multiply: ${a} * ${b} = ${result}`);
-    
+
                 return {
                     content: [
                         {
@@ -124,14 +124,14 @@ async function main() {
                     ]
                 }
             }
-    
+
             case 'get_greeting': {
                 // validamos los datos
-                const {name} = greetingArgsSchema.parse(args);
+                const { name } = greetingArgsSchema.parse(args);
                 const greeting = `Hello, ${name}! Welcome to the MCP stdio server.`;
-    
+
                 console.error(`Generated greeting for ${name}`); // Log to stderr
-    
+
                 return {
                     content: [
                         {
@@ -141,7 +141,7 @@ async function main() {
                     ]
                 }
             }
-    
+
             case 'get_server_info': {
                 return {
                     content: [
@@ -158,16 +158,16 @@ async function main() {
                     ]
                 }
             }
-    
+
         }
     });
-    
+
     // arrancamos el servidor
-    console.error("Starting MCP stdio server..."); 
-    
+    console.error("Starting MCP stdio server...");
+
     const transport = new StdioServerTransport();
     await server.connect(transport);
-    
+
     console.error("Server connected via stdio transport");
 }
 
@@ -176,7 +176,7 @@ process.on("SIGINT", () => {
     console.error("Received SIGINT, shutting down gracefully");
     process.exit(0);
 });
-  
+
 process.on("SIGTERM", () => {
     console.error("Received SIGTERM, shutting down gracefully");
     process.exit(0);
