@@ -1,4 +1,4 @@
-mcp-resources/node_modules
-mcp-resources/*.blob
-mcp-resources/mcp-resources
-mcp-resources/bundle.js
+node_modules
+*.blob
+mcp-resources
+bundle.js
