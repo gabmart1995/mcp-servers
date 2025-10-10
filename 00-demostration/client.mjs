@@ -9,7 +9,7 @@ import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js'
 async function main() {
     // 1.- generamos el protocolo de transporte
     const transport = new StdioClientTransport({
-        command: 'server-mcp-weather', // or node server.mjs | node server.cjs
+        command: '/opt/mcp-servers/server-mcp-weather', // or node server.mjs | node server.cjs
         args: []
     });
 
