@@ -1,0 +1,4 @@
+node_modules
+*.blob
+bundle.js
+server-mcp-money-converter-linux-x64

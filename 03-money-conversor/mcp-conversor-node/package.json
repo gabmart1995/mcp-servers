@@ -1,0 +1,19 @@
+{
+  "name": "mcp-conversor-node",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "inspector": "npx @modelcontextprotocol/inspector node main.js",
+    "build": "esbuild --bundle --platform=node --target=node22 --minify --outfile=bundle.js --format=cjs main.js",
+    "build-linux": "./make_linux.sh"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "mcp de conversion y visualizacion de valores de monedas",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "1.17.3",
+    "zod": "3.25.76"
+  }
+}
