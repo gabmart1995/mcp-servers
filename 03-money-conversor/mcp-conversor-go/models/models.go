@@ -202,3 +202,19 @@ type ExchangeRequest struct {
 	} `json:"rates"`
 	Lastupdate time.Time `json:"lastupdate"`
 }
+
+type Properties struct {
+	Type        string `json:"type"`
+	Description string `json:"description"`
+}
+
+type InputSchema struct {
+	Type       string                `json:"type"`
+	Required   []string              `json:"required"`
+	Properties map[string]Properties `json:"properties"`
+}
+
+type ResultConvert struct {
+	Rate  float64 `json:"rate"`
+	Value float64 `json:"value"`
+}
