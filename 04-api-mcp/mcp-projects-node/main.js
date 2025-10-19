@@ -169,7 +169,7 @@ async function main() {
                 jpg: 'image/jpeg',
                 jpeg: 'image/jpeg',
                 png: 'image/png',
-                git: 'image/gif'
+                gif: 'image/gif'
             };
 
             // obtenemos la extension del archivo
