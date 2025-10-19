@@ -113,7 +113,7 @@ async function deleteProject(request, response) {
     /** @type {string} */
     let id = request.params.id;
     
-    const data = BD.getInstance().data;
+    const data = { ...BD.getInstance().data };
     const find = id in data;
 
     if (!find) {
@@ -169,7 +169,7 @@ async function update(request, response) {
     }
 
     // verificamos la informacion en base de datos
-    const data = BD.getInstance().data;
+    const data = { ...BD.getInstance().data };
     const find = body.id in data;
 
     if (!find) {
@@ -221,7 +221,7 @@ async function update(request, response) {
  * @param {Express.Request} request 
  * @param {Express.Response} response 
  */
-function upload(request, response) {
+async function upload(request, response) {
     /** @type {string} */
     let id = request.params.id;
     
@@ -254,9 +254,12 @@ function upload(request, response) {
     
     const projectUpdate = (BD.getInstance()).data[id];
 
-    // si existe la imagen
+    // si existe el registro de la imagen
     if (projectUpdate.image) {
         const oldImagePath = `./uploads/images/${projectUpdate.image}`;
+
+        // verifica si existe en el disco y la borra
+        if (fs.existsSync(oldImagePath)) fs.unlinkSync(oldImagePath);
     }
 
     // actualizamos la imagen del proyecto
@@ -270,7 +273,8 @@ function upload(request, response) {
             ok: true,
             status: 200,
             message: 'Proyecto actualizado',
-            file: request.file,
+            project: projectUpdate,
+            newFile: request.file.filename 
         });
 
     } catch (error) {
@@ -284,11 +288,33 @@ function upload(request, response) {
     }
 }
 
+/**
+ * permite visualizar las imagenes
+ * @param {Express.Request} request 
+ * @param {Express.Response} response 
+ */
+function getImage(request, response) {
+    /** @type {string} */
+    let fileName = request.params.file;
+    let filePath = `./uploads/images/${fileName}`;
+
+    fs.stat(filePath, (error, stat) => {
+        if (!error && stat) return response.sendFile(path.resolve(filePath));
+
+        return response.status(404).json({
+            ok: true,
+            status: 404,
+            message: 'La imagen no existe'
+        });
+    });
+}
+
 export default {
     save,
     list,
     item,
     update,
     deleteProject,
-    upload                
+    upload,
+    getImage                
 }
