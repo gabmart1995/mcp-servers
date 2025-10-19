@@ -157,14 +157,6 @@ async function main() {
             }
         },
         async ({ file }) => {
-            const response = await fetch(`${BASE_URL}/image/${file}`);
-
-            if (!response.ok) throw new Error('Error en la consulta');
-
-            // extraemos la imagen del buffer
-            const data = await response.arrayBuffer();
-            const buffer = Buffer.from(data);
-            const imageBase64 = buffer.toString('base64');
             const formats = {
                 jpg: 'image/jpeg',
                 jpeg: 'image/jpeg',
@@ -179,6 +171,15 @@ async function main() {
                 .replace('.', '');
 
             if (!(extension in formats)) throw new Error('Error: formato no valido'); 
+
+            const response = await fetch(`${BASE_URL}/image/${file}`);
+
+            if (!response.ok) throw new Error('Error en la consulta');
+
+            // extraemos la imagen del buffer
+            const data = await response.arrayBuffer();
+            const buffer = Buffer.from(data);
+            const imageBase64 = buffer.toString('base64');
 
             return {
                 content: [
