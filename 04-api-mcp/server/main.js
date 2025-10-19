@@ -2,7 +2,7 @@ import express from 'express';
 
 import { CORSMiddleware } from './config/middlewares.js';
 import { routes } from './routes/index.js';
-import BD from './config/configuration.js';
+import BD from './config/bd.js';
 
 async function main() {
     await BD.getInstance().connect();
@@ -22,5 +22,5 @@ async function main() {
     app.listen(PORT, () => console.log(`Server running in port ${PORT}`));
 }
 
-main();
+main().catch(console.error);
 

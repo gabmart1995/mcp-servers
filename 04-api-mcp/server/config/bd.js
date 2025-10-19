@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 
 import '../models/models.js';
 
@@ -16,6 +17,9 @@ class BD {
     }
 
     async connect() {
+        // sino existe el archivo lo crea
+        if (!existsSync('bd.json')) await BD.getInstance().write();
+
         await BD.getInstance().read();
     }
     

@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 
-import BD from '../config/configuration.js';
+import BD from '../config/bd.js';
 
 /**
  * Salva los cambios
@@ -11,7 +11,7 @@ async function save(request, response) {
     /** @type {ProjectScheme} */
     let body = request.body;
  
-    if (!body.name || !body.description || !body.state) {
+    if (!body || !body.name || !body.description || !body.state) {
         return response.status(400).json({
             ok: false,
             status: 400,
@@ -21,9 +21,7 @@ async function save(request, response) {
 
     /** @type {ProjectScheme} */
     let project = {
-        name: body.name,
-        description: body.description,
-        state: body.state,
+        ...body,
         created_at: new Date().toISOString(),
         image: body.image || undefined
     }
@@ -52,9 +50,173 @@ async function save(request, response) {
             message: 'error al almacenar en BD',
         });
     }
+}
 
+/**
+ * Lista los proyectos en la colección
+ * @param {Express.Request} request 
+ * @param {Express.Response} response 
+ */
+function list(request, response) {
+    const data = BD.getInstance().data;
+
+    if ((Object.keys(data)).length === 0) {
+        return response.status(404).json({
+            ok: false,
+            status: 404,
+            message: 'No existen proyectos que mostrar'
+        });
+    }
+
+    return response.status(200).json({
+        ok: true,
+        status: 200,
+        projects: Object.values(data)
+    });
+}
+
+/**
+ * Retorna un proyecto en especifico usando el UUID
+ * @param {Express.Request} request 
+ * @param {Express.Response} response 
+ */
+function item(request, response) {
+    /** @type {string} */
+    let id = request.params.id;
+    
+    const data = BD.getInstance().data;
+    const find = id in data;
+
+    if (!find) {
+        return response.status(404).json({
+            ok: false,
+            status: 404,
+            message: 'El proyecto solicitado no existe'
+        });
+    }
+
+    return response.status(200).json({
+        ok: true,
+        status: 200,
+        project: data[id]
+    });
+}
+
+/**
+ * Borra un proyecto en especifico
+ * @param {Express.Request} request 
+ * @param {Express.Response} response 
+ */
+async function deleteProject(request, response) {
+    /** @type {string} */
+    let id = request.params.id;
+    
+    const data = BD.getInstance().data;
+    const find = id in data;
+
+    if (!find) {
+        return response.status(404).json({
+            ok: false,
+            status: 404,
+            message: 'El proyecto solicitado no existe'
+        });
+    }
+
+    // eliminamos el proyecto en memoria
+    delete (BD.getInstance()).data[id];
+
+    // actualizamos el archivo en BD
+    try {
+        await (BD.getInstance()).write();
+        
+        return response.status(200).json({
+            ok: true,
+            status: 200,
+            message: 'Operación exitosa',
+            deleted: data[id],
+        });
+
+    } catch (error) {
+        console.error(error);
+        
+        return response.status(500).json({
+            ok: false,
+            status: 500,
+            message: 'error al escribir en BD',
+        }); 
+    }
+}
+
+
+/**
+ * Actualiza un proyecto en especifico
+ * @param {Express.Request} request 
+ * @param {Express.Response} response 
+ */
+async function update(request, response) {
+    /** @type {ProjectScheme} */
+    let body = request.body;
+    
+    // verificamos los campos
+    if (!body || !body.name || !body.description || !body.state || !body.id) {
+        return response.status(400).json({
+            ok: false,
+            status: 400,
+            message: 'Faltan datos por enviar'
+        });
+    }
+
+    // verificamos la informacion en base de datos
+    const data = BD.getInstance().data;
+    const find = body.id in data;
+
+    if (!find) {
+        return response.status(404).json({
+            ok: false,
+            status: 404,
+            message: 'El proyecto solicitado no existe'
+        });
+    }
+
+    /** @type {ProjectScheme} */
+    let project = {
+        ...body,
+        created_at: (data[body.id]).created_at || undefined,
+        image: body.image || undefined
+    }
+
+    // borramos el id
+    delete project.id;
+
+    // actualizamos en memoria
+    (BD.getInstance()).data[body.id] = project;
+
+    // actualizamos el archivo en BD
+    try {
+        await (BD.getInstance()).write();
+        
+        return response.status(200).json({
+            ok: true,
+            status: 200,
+            message: 'Operación exitosa',
+            updated: data[body.id],
+        });
+
+    } catch (error) {
+        console.error(error);
+        
+        return response.status(500).json({
+            ok: false,
+            status: 500,
+            message: 'error al escribir en BD',
+        }); 
+    }
 }
 
 export default {
-    save
+    save,
+    list,
+    item,
+    update,
+    deleteProject                
 }
