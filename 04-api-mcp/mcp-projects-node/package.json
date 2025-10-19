@@ -1,0 +1,13 @@
+{
+    "name": "mcp-project-node",
+    "version": "1.0.0",
+    "main": "main.js",
+    "type": "module",
+    "scripts": {
+        "inspector": "npx @modelcontextprotocol/inspector node main.js"
+    },
+    "dependencies": {
+        "@modelcontextprotocol/sdk": "1.17.3",
+        "zod": "3.25.76"
+    }
+}
