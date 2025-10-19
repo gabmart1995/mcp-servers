@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import path from 'node:path';
 import { randomUUID } from 'node:crypto';
 
 import BD from '../config/bd.js';
@@ -213,10 +215,80 @@ async function update(request, response) {
     }
 }
 
+/**
+ * permite la carga de archivos usando form data
+ * hacia carpeta en especifico y actualiza el registro
+ * @param {Express.Request} request 
+ * @param {Express.Response} response 
+ */
+function upload(request, response) {
+    /** @type {string} */
+    let id = request.params.id;
+    
+    if (!request.file) {
+        return response.status(404).json({
+            ok: false,
+            status: 404,
+            message: 'No se ha subido ningun archivo'
+        });
+    }
+
+    // filtramos las extensiones
+    const filePath = request.file.path;
+    const extension = path
+        .extname(request.file.originalname)
+        .toLowerCase()
+        .replace('.', '');
+
+    const validExtensions = ['png', 'jpg', 'jpeg', 'gif'];
+
+    if (!validExtensions.includes(extension)) {
+        fs.unlinkSync(filePath);
+    
+        return response.status(400).json({
+            ok: true,
+            status: 400,
+            message: 'Extensión no valida',     
+        });
+    }
+    
+    const projectUpdate = (BD.getInstance()).data[id];
+
+    // si existe la imagen
+    if (projectUpdate.image) {
+        const oldImagePath = `./uploads/images/${projectUpdate.image}`;
+    }
+
+    // actualizamos la imagen del proyecto
+    (BD.getInstance()).data[id].image = request.file.filename;
+
+    // actualizamos el archivo en BD
+    try {
+        await (BD.getInstance()).write();
+        
+        return response.status(200).json({
+            ok: true,
+            status: 200,
+            message: 'Proyecto actualizado',
+            file: request.file,
+        });
+
+    } catch (error) {
+        console.error(error);
+        
+        return response.status(500).json({
+            ok: false,
+            status: 500,
+            message: 'error al escribir en BD',
+        }); 
+    }
+}
+
 export default {
     save,
     list,
     item,
     update,
-    deleteProject                
+    deleteProject,
+    upload                
 }

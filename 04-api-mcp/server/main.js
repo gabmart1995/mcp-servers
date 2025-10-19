@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { CORSMiddleware } from './config/middlewares.js';
+import { CORSMiddleware } from './config/cors.js';
 import { routes } from './routes/index.js';
 import BD from './config/bd.js';
 
