@@ -21,14 +21,15 @@ async function save(request, response) {
         });
     }
 
+    let uuid = randomUUID();
+    
     /** @type {ProjectScheme} */
     let project = {
         ...body,
+        id: uuid,
         created_at: new Date().toISOString(),
         image: body.image || undefined
-    }
-
-    let uuid = randomUUID();
+    };
 
     // establecemos el nuevo valor
     (BD.getInstance()).data[uuid] = project;

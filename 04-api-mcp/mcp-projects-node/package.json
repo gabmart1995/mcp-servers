@@ -4,7 +4,9 @@
     "main": "main.js",
     "type": "module",
     "scripts": {
-        "inspector": "npx @modelcontextprotocol/inspector node main.js"
+        "inspector": "npx @modelcontextprotocol/inspector node main.js",
+        "build": "esbuild --bundle --platform=node --target=node22 --minify --outfile=bundle.js --format=cjs main.js",
+        "make_linux": "./make_linux.sh"
     },
     "dependencies": {
         "@modelcontextprotocol/sdk": "1.17.3",
