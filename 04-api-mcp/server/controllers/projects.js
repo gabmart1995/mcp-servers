@@ -186,10 +186,9 @@ async function update(request, response) {
         ...body,
         created_at: (data[body.id]).created_at || undefined,
         image: body.image || undefined
-    }
+    };
 
-    // borramos el id
-    delete project.id;
+    // console.log(project);
 
     // actualizamos en memoria
     (BD.getInstance()).data[body.id] = project;

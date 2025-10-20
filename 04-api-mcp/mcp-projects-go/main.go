@@ -1,107 +1,13 @@
 package main
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
-	"fmt"
-	"io"
 	"log"
+	"mcp-projects-go/controllers"
 	"mcp-projects-go/models"
-	"net/http"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
-
-const API_URL = "http://localhost:3000/project"
-
-// salva un nuevo projecto
-func saveProject(ctx context.Context, ctr *mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	data, err := json.Marshal(ctr.Params.Arguments)
-
-	if err != nil {
-		return nil, err
-	}
-
-	request, err := http.NewRequest(
-		"POST",
-		fmt.Sprintf("%s/save", API_URL),
-		bytes.NewBuffer(data),
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	request.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	response, err := client.Do(request)
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer response.Body.Close()
-
-	// extraemos el body
-	body, err := io.ReadAll(response.Body)
-
-	if err != nil {
-		return nil, err
-	}
-
-	result := &mcp.CallToolResult{
-		Content: []mcp.Content{
-			&mcp.TextContent{
-				Text: string(body),
-			},
-		},
-	}
-
-	return result, nil
-}
-
-// permite listar los proyectos en la base de datos
-func listProjects(ctx context.Context, ctr *mcp.CallToolRequest) (*mcp.CallToolResult, error) {
-	request, err := http.NewRequest(
-		"GET",
-		fmt.Sprintf("%s/list", API_URL),
-		nil,
-	)
-
-	if err != nil {
-		return nil, err
-	}
-
-	request.Header.Set("Content-Type", "application/json")
-
-	client := &http.Client{}
-	response, err := client.Do(request)
-
-	if err != nil {
-		return nil, err
-	}
-
-	defer response.Body.Close()
-
-	// extraemos el body
-	body, err := io.ReadAll(response.Body)
-
-	if err != nil {
-		return nil, err
-	}
-
-	result := &mcp.CallToolResult{
-		Content: []mcp.Content{
-			&mcp.TextContent{
-				Text: string(body),
-			},
-		},
-	}
-
-	return result, nil
-}
 
 func main() {
 	server := mcp.NewServer(&mcp.Implementation{
@@ -123,7 +29,7 @@ func main() {
 				Required: []string{"name", "description", "state"},
 			},
 		},
-		saveProject,
+		controllers.SaveProject,
 	)
 
 	server.AddTool(
@@ -136,7 +42,70 @@ func main() {
 				Required:   []string{},
 			},
 		},
-		listProjects,
+		controllers.ListProjects,
+	)
+
+	server.AddTool(
+		&mcp.Tool{
+			Name:        "list_project_id",
+			Description: "Lista un proyecto en especifico usando un ID",
+			InputSchema: models.InputSchema{
+				Type: "object",
+				Properties: map[string]models.Properties{
+					"id": {Type: "string", Description: "Identificador del proyecto"},
+				},
+				Required: []string{"id"},
+			},
+		},
+		controllers.ListProjectId,
+	)
+
+	server.AddTool(
+		&mcp.Tool{
+			Name:        "update_project",
+			Description: "Actualiza un proyecto pasando el identificador",
+			InputSchema: models.InputSchema{
+				Type: "object",
+				Properties: map[string]models.Properties{
+					"id":          {Type: "string", Description: "identificador del proyecto"},
+					"name":        {Type: "string", Description: "nombre del proyecto"},
+					"description": {Type: "string", Description: "descripcion"},
+					"state":       {Type: "string", Description: "estado del proyecto"},
+				},
+				Required: []string{"id", "name", "description", "state"},
+			},
+		},
+		controllers.UpdateProject,
+	)
+
+	server.AddTool(
+		&mcp.Tool{
+			Name:        "delete_project_id",
+			Description: "Elimina un proyecto en especifico usando un ID",
+			InputSchema: models.InputSchema{
+				Type: "object",
+				Properties: map[string]models.Properties{
+					"id": {Type: "string", Description: "Identificador del proyecto"},
+				},
+				Required: []string{"id"},
+			},
+		},
+		controllers.DeleteProject,
+	)
+
+	server.AddTool(
+		&mcp.Tool{
+			Name:        "get_image_project",
+			Description: "Localiza una imagen del proyecto usando el nombre del archivo",
+			InputSchema: models.InputSchema{
+				Type: "object",
+				Properties: map[string]models.Properties{
+					"filename": {Type: "string", Description: "nombre del archivo"},
+				},
+				Required: []string{"filename"},
+			},
+		},
+		controllers.GetImageProject,
 	)
 
 	// corremos el server
