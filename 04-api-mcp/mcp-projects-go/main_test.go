@@ -9,14 +9,10 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
-func TestGetImage(t *testing.T) {
+func TestMCPProject(t *testing.T) {
 	ctx := context.Background()
-	input := struct {
-		Filename string `json:"filename"`
-	}{Filename: "project-1760900859010-20230128_100359.jpg"}
-
 	// creamos el cliente mcp
-	client := mcp.NewClient(&mcp.Implementation{Name: "test-mcp-project", Version: "0.0.1"}, nil)
+	client := mcp.NewClient(&mcp.Implementation{Name: "test-mcp-projects", Version: "0.0.1"}, nil)
 
 	// ejecutamos el servidor mcp en segundo plano
 	transport := &mcp.CommandTransport{Command: exec.Command("go", "run", "main.go")}
@@ -29,14 +25,19 @@ func TestGetImage(t *testing.T) {
 
 	defer session.Close()
 
-	// ejecutamos la herramienta mcp
-	params := &mcp.CallToolParams{
-		Name:      "get_image_project",
-		Arguments: input,
-	}
+	t.Run("get_image_project", func(t *testing.T) {
+		input := struct {
+			Filename string `json:"filename"`
+		}{
+			Filename: "project-1760900859010-20230128_100359.jpg",
+		}
 
-	// evaluamos la expresion obtenida
-	t.Run("get_image", func(t *testing.T) {
+		// ejecutamos la herramienta mcp
+		params := &mcp.CallToolParams{
+			Name:      "get_image_project",
+			Arguments: input,
+		}
+
 		result, err := session.CallTool(ctx, params)
 
 		// verificamos los errores

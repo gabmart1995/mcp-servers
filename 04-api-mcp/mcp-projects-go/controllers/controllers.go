@@ -16,16 +16,6 @@ import (
 
 const API_URL = "http://localhost:3000/project"
 
-func contains(sli []string, val string) bool {
-	for _, value := range sli {
-		if value == val {
-			return true
-		}
-	}
-
-	return false
-}
-
 // salva un nuevo projecto
 func SaveProject(ctx context.Context, ctr *mcp.CallToolRequest) (*mcp.CallToolResult, error) {
 	data, err := json.Marshal(ctr.Params.Arguments)
@@ -251,17 +241,23 @@ func GetImageProject(ctx context.Context, ctr *mcp.CallToolRequest) (*mcp.CallTo
 	var args struct {
 		Filename string `json:"filename"`
 	}
+	formats := map[string]string{
+		"jpg":  "image/jpeg",
+		"jpeg": "image/jpeg",
+		"git":  "image/gif",
+		"png":  "image/png",
+	}
 
 	if err := json.Unmarshal(ctr.Params.Arguments, &args); err != nil {
 		return nil, err
 	}
 
 	// validamos la extension antes de realizar la consulta
-	extension := filepath.Ext(args.Filename)
-	format := []string{".jpg", ".png", ".gif", ".jpeg"}
+	extension := filepath.Ext(args.Filename)[1:]
+	mimeType, exists := formats[extension]
 
-	if !contains(format, extension) {
-		return nil, errors.New("error: formato de archivo no valido")
+	if !exists {
+		return nil, errors.New("error: format not supported")
 	}
 
 	request, err := http.NewRequest(
@@ -291,29 +287,13 @@ func GetImageProject(ctx context.Context, ctr *mcp.CallToolRequest) (*mcp.CallTo
 	}
 
 	// construimos la instacia de la imagen
-	var (
-		mimeType    string
-		imageBase64 []byte
-	)
-
-	switch extension {
-	case ".jpg":
-		mimeType = "image/jpg"
-	case ".jpeg":
-		mimeType = "image/jpeg"
-	case ".png":
-		mimeType = "image/png"
-	default:
-		mimeType = "image/gif"
-	}
-
-	base64.StdEncoding.Encode(imageBase64, body)
+	imageBase64 := base64.StdEncoding.EncodeToString(body)
 
 	result := &mcp.CallToolResult{
 		Content: []mcp.Content{
 			&mcp.ImageContent{
-				Data:     imageBase64,
 				MIMEType: mimeType,
+				Data:     []byte(imageBase64),
 			},
 		},
 	}

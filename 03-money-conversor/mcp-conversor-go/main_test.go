@@ -10,11 +10,8 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 )
 
-func TestValueMoney(t *testing.T) {
+func TestMoneyValue(t *testing.T) {
 	ctx := context.Background()
-	input := struct {
-		Currency string `json:"currency"`
-	}{Currency: "EUR"}
 
 	// creamos el cliente mcp
 	client := mcp.NewClient(&mcp.Implementation{Name: "test-mcp-money-convertor", Version: "0.0.1"}, nil)
@@ -30,14 +27,12 @@ func TestValueMoney(t *testing.T) {
 
 	defer session.Close()
 
-	// ejecutamos la herramienta mcp
-	params := &mcp.CallToolParams{
-		Name:      "valor moneda",
-		Arguments: input,
-	}
-
 	// evaluamos la expresion obtenida
 	t.Run("get_money_value", func(t *testing.T) {
+		input := struct {
+			Currency string `json:"currency"`
+		}{Currency: "EUR"}
+
 		data, err := getMoneyValue(input.Currency)
 
 		// verificamos los errores
@@ -52,6 +47,12 @@ func TestValueMoney(t *testing.T) {
 			BASE_CURRENCY,
 			data,
 		)
+
+		// ejecutamos la herramienta mcp
+		params := &mcp.CallToolParams{
+			Name:      "valor_moneda",
+			Arguments: input,
+		}
 
 		result, err := session.CallTool(ctx, params)
 
@@ -102,7 +103,7 @@ func TestConvertionMoney(t *testing.T) {
 
 	// ejecutamos la herramienta mcp
 	params := &mcp.CallToolParams{
-		Name:      "conversor tipo cambio",
+		Name:      "conversor_tipo_cambio",
 		Arguments: input,
 	}
 
@@ -177,7 +178,7 @@ func TestConvertionMoney(t *testing.T) {
 
 		// actualizamos los valores
 		params = &mcp.CallToolParams{
-			Name:      "conversor tipo cambio",
+			Name:      "conversor_tipo_cambio",
 			Arguments: input,
 		}
 
