@@ -52,7 +52,7 @@ async function main() {
         async () => {
             const response = await fetch(`${BASE_URL}/list`);
 
-            if (!response.ok) throw new Error('Error al consultar el proyecto');
+            if (!response.ok) throw new Error('Error al consultar los proyectos');
 
             const data = await response.json();
 
@@ -76,7 +76,7 @@ async function main() {
         async ({ id }) => {
             const response = await fetch(`${BASE_URL}/list/${id}`);
 
-            if (!response.ok) throw new Error('Error al consultar los proyectos');
+            if (!response.ok) throw new Error('Error al consultar el proyecto');
 
             const data = await response.json();
 
