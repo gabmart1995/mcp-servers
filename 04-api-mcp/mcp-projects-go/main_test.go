@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"mcp-projects-go/models"
 	"os/exec"
 	"testing"
 
@@ -24,6 +25,104 @@ func TestMCPProject(t *testing.T) {
 	}
 
 	defer session.Close()
+
+	t.Run("list_project_by_id", func(t *testing.T) {
+		input := struct {
+			Id string `json:"id"`
+		}{
+			Id: "c903bbc9-8fb4-4a18-9172-ffc16d499d34",
+		}
+
+		params := &mcp.CallToolParams{
+			Name:      "list_project_id",
+			Arguments: input,
+		}
+
+		result, err := session.CallTool(ctx, params)
+
+		// verificamos los errores
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		if result.IsError {
+			t.Errorf("error: execute failed")
+			return
+		}
+	})
+
+	t.Run("list_proyects", func(t *testing.T) {
+		params := &mcp.CallToolParams{
+			Name: "list_project_id",
+		}
+
+		result, err := session.CallTool(ctx, params)
+
+		// verificamos los errores
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		if result.IsError {
+			t.Errorf("error: execute failed")
+			return
+		}
+	})
+
+	t.Run("save_project", func(t *testing.T) {
+		input := models.Project{
+			Name:        "testing project",
+			Description: "testing project in react",
+			Status:      "progress",
+		}
+
+		params := &mcp.CallToolParams{
+			Name:      "save_project",
+			Arguments: input,
+		}
+
+		result, err := session.CallTool(ctx, params)
+
+		// verificamos los errores
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		if result.IsError {
+			t.Errorf("error: execute failed")
+			return
+		}
+	})
+
+	t.Run("update_project", func(t *testing.T) {
+		input := models.Project{
+			Name:        "testing project",
+			Description: "testing project in react",
+			Status:      "progress",
+			Id:          "04e17f2c-040b-44a4-bf3e-40968779944e",
+		}
+
+		params := &mcp.CallToolParams{
+			Name:      "save_project",
+			Arguments: input,
+		}
+
+		result, err := session.CallTool(ctx, params)
+
+		// verificamos los errores
+		if err != nil {
+			t.Error(err)
+			return
+		}
+
+		if result.IsError {
+			t.Errorf("error: execute failed")
+			return
+		}
+	})
 
 	t.Run("get_image_project", func(t *testing.T) {
 		input := struct {
